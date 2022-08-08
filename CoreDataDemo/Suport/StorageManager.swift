@@ -87,15 +87,5 @@ class StorageManager {
         return taskList
     }
     
-//    func deleteTask(_ taskName: String, with context: NSManagedObjectContext) {
-//        guard let entityDescription = NSEntityDescription.entity(forEntityName: "Task", in: context) else { return }
-//        guard let task = NSManagedObject(entity: entityDescription, insertInto: context) as? Task else { return }
-//        task.title = taskName
-//
-//        if context.hasChanges {
-//            context.delete(task)
-//        }
-//    }
-    
     private init() {}
 }

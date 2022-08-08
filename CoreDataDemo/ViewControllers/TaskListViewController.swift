@@ -72,7 +72,7 @@ class TaskListViewController: UITableViewController {
         let editAction = UIAlertAction(title: "Edit Task", style: .default) { _ in
             guard let task = alert.textFields?.first?.text, !task.isEmpty else { return }
             self.taskList = StorageManager.shared.editTask(oldTask: text, newTask: task, context: self.context)
-            
+            self.tableView.reloadData()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
         alert.addAction(editAction)
@@ -123,11 +123,9 @@ extension TaskListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       
         showEditAlert(with: "Edit task", message: "", text: taskList[indexPath.row].title ?? "")
-        self.tableView.reloadData()
     }
     
 
 }
 
-// MARK: - TaskViewControllerDelegate
 
