@@ -59,5 +59,26 @@ class StorageManager {
         }
     }
     
+    func deleteTask(_ task: Task, context: NSManagedObjectContext) {
+        context.delete(task)
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch let error {
+                print(error)
+            }
+        }
+    }
+    
+//    func deleteTask(_ taskName: String, with context: NSManagedObjectContext) {
+//        guard let entityDescription = NSEntityDescription.entity(forEntityName: "Task", in: context) else { return }
+//        guard let task = NSManagedObject(entity: entityDescription, insertInto: context) as? Task else { return }
+//        task.title = taskName
+//
+//        if context.hasChanges {
+//            context.delete(task)
+//        }
+//    }
+    
     private init() {}
 }
