@@ -48,10 +48,10 @@ class TaskListViewController: UITableViewController {
     }
     
     @objc private func addNewTask() {
-        showAlert(with: "New Task", and: "What do you want to do?")
+        showSaveAlert(with: "New Task", and: "What do you want to do?")
     }
     
-    private func showAlert(with title: String, and message: String) {
+    private func showSaveAlert(with title: String, and message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
             guard let task = alert.textFields?.first?.text, !task.isEmpty else { return }
@@ -67,6 +67,22 @@ class TaskListViewController: UITableViewController {
         present(alert, animated: true)
     }
     
+    private func showEditAlert(with title: String, message: String, text: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let editAction = UIAlertAction(title: "Edit Task", style: .default) { _ in
+            guard let task = alert.textFields?.first?.text, !task.isEmpty else { return }
+            self.taskList = StorageManager.shared.editTask(oldTask: text, newTask: task, context: self.context)
+            
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+        alert.addAction(editAction)
+        alert.addAction(cancelAction)
+        alert.addTextField { textField in
+            textField.placeholder = text
+        }
+        present(alert, animated: true)
+    }
+    
     private func save(task: String) {
         StorageManager.shared.saveTask(task, with: context)
         
@@ -75,6 +91,7 @@ class TaskListViewController: UITableViewController {
         let cellIndex = IndexPath(row: taskList.count - 1, section: 0)
         tableView.insertRows(at: [cellIndex], with: .automatic)
     }
+    
 }
 
 
@@ -102,6 +119,14 @@ extension TaskListViewController {
             StorageManager.shared.deleteTask(deletedTask, context: context)
         }
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+      
+        showEditAlert(with: "Edit task", message: "", text: taskList[indexPath.row].title ?? "")
+        self.tableView.reloadData()
+    }
+    
+
 }
 
 // MARK: - TaskViewControllerDelegate

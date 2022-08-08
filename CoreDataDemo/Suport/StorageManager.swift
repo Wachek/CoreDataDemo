@@ -70,6 +70,23 @@ class StorageManager {
         }
     }
     
+    func editTask(oldTask: String, newTask: String, context: NSManagedObjectContext) -> [Task] {
+        let taskList = StorageManager.shared.fetchTasks(with: context)
+        for task in taskList {
+            if task.title == oldTask {
+                task.title = newTask
+            }
+        }
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch let error {
+                print(error)
+            }
+        }
+        return taskList
+    }
+    
 //    func deleteTask(_ taskName: String, with context: NSManagedObjectContext) {
 //        guard let entityDescription = NSEntityDescription.entity(forEntityName: "Task", in: context) else { return }
 //        guard let task = NSManagedObject(entity: entityDescription, insertInto: context) as? Task else { return }
